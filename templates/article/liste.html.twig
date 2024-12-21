@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Articles{% endblock %}
+
+{% block body %}
+    {% include 'header.html.twig' %}
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <!-- Sidenav content here (no change) -->
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Liste des Articles</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="{{ path('app_article_liste') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Articles</li>
+                    </ol>
+
+                    {% if articles is empty %}
+                        <div class="alert alert-warning">
+                            Aucun article trouvé.
+                        </div>
+                    {% else %}
+                        <div class="row">
+                            {% for article in articles %}
+                                <div class="col-md-4 mb-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            {% if article.image %}
+                                                <img src="{{ asset('uploads/images/' ~ article.image) }}" alt="{{ article.titre }}" class="img-fluid mb-3" style="max-height: 200px; object-fit: cover;" />
+                                            {% endif %}
+                                            <h5 class="card-title">{{ article.titre }}</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                {{ article.texte|length > 100 ? article.texte[:100] ~ '...' : article.texte }}
+                                            </p>
+                                        </div>
+                                        <div class="card-footer text-muted">
+                                            <small>
+                                                Publié le {{ article.date|date('d/m/Y') }} -
+                                                {% if article.publie %}
+                                                    <span class="text-success">Publié</span>
+                                                {% else %}
+                                                    <span class="text-danger">Non publié</span>
+                                                {% endif %}
+                                            </small>
+                                        </div>
+                                        <div class="card-footer">
+                                            {% if app.user %}
+                                                <a href="{{ path('app_article_modifier', { id: article.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                                <a href="{{ path('app_article_supprimer', { id: article.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                                            {% else %}
+                                                <a href="{{ path('app_login') }}" class="btn btn-info btn-sm">Se connecter pour modifier ou supprimer</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </main>
+            {% include 'footer.html.twig' %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Connexion</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
+                        <li class="breadcrumb-item active">Connexion</li>
+                    </ol>
+
+                    <div class="card p-4">
+                        <h5 class="card-title">Veuillez vous connecter</h5>
+
+                        <!-- Formulaire de connexion -->
+                        <form method="post">
+                            {% if error %}
+                                <div class="alert alert-danger">
+                                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                                </div>
+                            {% endif %}
+
+                            {% if app.user %}
+                                <div class="alert alert-info">
+                                    Vous êtes connecté en tant que {{ app.user.userIdentifier }},
+                                    <a href="{{ path('app_logout') }}">Se déconnecter</a>.
+                                </div>
+                            {% endif %}
+
+                            <div class="form-group mb-3">
+                                <label for="username">Email</label>
+                                <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="password">Mot de passe</label>
+                                <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                            </div>
+
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                            {# Option pour "Se souvenir de moi" #}
+                            {#
+                                <div class="form-check mb-3">
+                                    <input type="checkbox" name="_remember_me" id="_remember_me" class="form-check-input">
+                                    <label class="form-check-label" for="_remember_me">Se souvenir de moi</label>
+                                </div>
+                            #}
+
+                            <button class="btn btn-primary btn-block" type="submit">
+                                Se connecter
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+            {% include 'footer.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
